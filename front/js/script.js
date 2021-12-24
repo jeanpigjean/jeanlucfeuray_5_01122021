@@ -11,7 +11,7 @@ async function fillSection() {
     var result = await getArticles ()
     .then(function (resultatAPI){
         const articles = resultatAPI;
-        console.table(articles);
+        //console.table(articles);
         for (let article in articles) {
 
             // Insertion de l'élément "a"
