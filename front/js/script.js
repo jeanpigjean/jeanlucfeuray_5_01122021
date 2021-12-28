@@ -1,3 +1,4 @@
+
 //Récupération du tableau de produits disponibles
 getProducts();
 
@@ -14,7 +15,7 @@ async function getProducts() {
 async function creationProducts() {
     let result = await getProducts()
     .then( (product) => {
-        for (let i=0; i < product.length; i++) {		
+        for (let i=0; i < product.length; i++) {        
 
             // Insertion de l'élément "a"
             let productLink = document.createElement("a");
