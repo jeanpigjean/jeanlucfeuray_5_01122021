@@ -1,4 +1,24 @@
-let productLocalStorage = JSON.parse(localStorage.getItem("cart"));
+//récuperer les commandes du local storage
+//let productCart = JSON.parse(localStorage.getItem("cart"));
+let mesCommandes = JSON.parse(localStorage.getItem("maCart"));
+
+console.log(mesCommandes);
+
+//localStorage.setItem('maCart', productCartObj) ;  
+//les cartes
+let toto = document.getElementById('cart__items');
+toto.innerHTML = 'on commence la page 3';
+
+//prix total
+let tata = document.getElementById('totalPrice');
+tata.innerHTML = '1000';
+
+//nombre article total
+let titi = document.getElementById('totalQuantity');
+titi.innerHTML = '6';
+
+
+/*let productLocalStorage = JSON.parse(localStorage.getItem("cart"));
 
 if (!productLocalStorage) {
 
@@ -308,4 +328,6 @@ function postForm() {
   
   }); // fin eventListener postForm
   } // fin envoi du formulaire postForm
-  postForm();
+  postForm();*/
+
+

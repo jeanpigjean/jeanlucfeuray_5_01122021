@@ -1,6 +1,17 @@
 //Récupération de l'id via les paramètres de l'url
 const idProduct = new URL(window.location.href).searchParams.get("id");
 
+//console.log(idProduct);
+//console.log(idProduct);
+
+getArticle();
+
+//Récupération de l'article grace a l'id + affichage des données de ce dernier
+function getArticle() {
+     fetch("http://localhost:3000/api/products/" + idProduct)
+    .then((response) => response.json())    
+    .then(product => {
+///////////////////////////////////////////////////////////////////
 //Récupération des sélecteurs pour les futurs modifications
 let titleProduct = document.getElementById("title");
 let priceProduct = document.getElementById("price");
@@ -9,133 +20,117 @@ let colorsProduct = document.getElementById("colors");
 let imgProduct = document.querySelector(".item__img");
 let img = document.createElement("img");
 imgProduct.appendChild(img);
+////////////////////////////////////////////////////////////////////////////
+// injection de la card
+img.setAttribute("src", product.imageUrl);
+img.setAttribute("alt", product.altTxt);    
+titleProduct.innerHTML = product.name;
+priceProduct.innerHTML = product.price;
+descriptionProduct.innerHTML = product.description;
+document.title = product.name;
 
-//Récupération de l'article grace a l'id + affichage des données de ce dernier
-getArticle();
-
-//Récupération de l'article grace a l'id + affichage des données de ce dernier
-async function getArticle() {
-     await fetch("http://localhost:3000/api/products/" + idProduct)
-    .then((response) => response.json())    
-    .then(product => {
-        img.setAttribute("src", product.imageUrl);
-        img.setAttribute("alt", product.altTxt);    
-        titleProduct.innerHTML = product.name;
-        priceProduct.innerHTML = product.price;
-        descriptionProduct.innerHTML = product.description;
-        document.title = product.name;
-
-        for (let i=0; i < product.colors.length; i++) {
-            let color = document.createElement("option");
-            color.setAttribute("value", product.colors[i]);
-            color.innerHTML = product.colors[i];
-            colorsProduct.appendChild(color);
-        }  
-    });          
+///////////////////////////////////////////////////
+// boucle pour injection de la card color choix option value
+for (let i = 0; i < product.colors.length; i++) {
+let color = document.createElement("option");
+color.setAttribute("value", product.colors[i]);
+color.innerHTML = product.colors[i];
+colorsProduct.appendChild(color);
 }
+//////////////////////////////////////  
 
-// Ajouté un article au panier
-let addToCartBtn = document.getElementById("addToCart");
-addToCartBtn.addEventListener("click", addToCart);
+}); //  fetch       
+}  //fetch
 
+//COULEUR
+//let couleur = document.getElementById();
+//couleur.innerHTML = product.colors[i];
+
+// Ajouté un article au panier le clic/////////////////
+let addToCartBtn = document.getElementById("addToCart");//séléctionner le bouton
+addToCartBtn.addEventListener("click", addToCart);//au clic jouer la fonction addToCart
+//////////////////////////////////////////////////////////////////
+
+// fonction principal
 function addToCart() {
 
-    const colorChoice = document. querySelector("#colors");
-    const quantityChoice = document.querySelector("#quantity");
+/////////////////////////////////////////////////////////////////////////////////////////
+// selection et controle des choix ou non avant creer objet et l'envoir sur local storage
+// constante sélecteur
+const quantityChoice = document.querySelector("#quantity");
+const colorChoice = document. querySelector("#colors");
 
-    if (quantityChoice.value > 0 && quantityChoice.value <=100 && quantityChoice.value != 0 && colorChoice.value != 0) { 
 
-        if (localStorage.getItem("cart")) {
-    
-            let productCart = JSON.parse(localStorage.getItem("cart"));
-            console.log(productCart);
 
-            let idKanap = idProduct;
-            let colorKanap = document.querySelector("#colors").value;
-            let qtyKanap = document.querySelector("#quantity").value;
+//controle erreur saisie pas de couleur pas de quantité
+if (colorChoice.value != 0 && quantityChoice.value  != 0 ) { //si couleur différente de 0 ou si quantité différente de 0 = valide
 
-            const resultFind = productCart.find(
-                (el) => el.idKanap === idProduct && el.colorKanap === colorKanap);
-                //Si le produit commandé est déjà dans le panier
-                console.log("result find est egal a :");
-                console.log(resultFind);
-                console.log("fin result find");
+//test
+//alert ('vous avez commander');
 
-                if (resultFind) {
-                    console.log("resultfind kanap = " + resultFind.qtyKanap);
-                    console.log("qtykanap = " + qtyKanap);
-                    let newQuantite = parseInt(qtyKanap) + parseInt(resultFind.qtyKanap);
-                    console.log("newQtt est egal a : " + newQuantite);
-                    resultFind.qtyKanap = newQuantite;
-                    localStorage.setItem("cart", JSON.stringify(productCart));
-                    console.log("productCart egal :");
-                    console.log(productCart);
-                    console.log("fin productCart");
-                //Si le produit commandé n'est pas dans le panier
-                } else {
-                    
-                    let productCart = JSON.parse(localStorage.getItem("cart"));
+//id
+//console.log(idProduct);
 
-                    let idKanap = idProduct;
-                    let nameKanap = document.querySelector("#title").textContent;
-                    let colorKanap = document.querySelector("#colors").value;
-                    let qtyKanap = document.querySelector("#quantity").value;
-                    let imgKanap = img.src; 
-                    let altImg = img.alt;
-                    let priceKanap = document.querySelector("#price").textContent;
-                    
-                    console.log(img);
-                    console.log(idKanap, nameKanap, colorKanap, qtyKanap, imgKanap, altImg, priceKanap);
+//color
+let ColorK = document.querySelector("#colors").value;
+//console.log(ColorK);
+
+//quantité
+let QtAchatK = document.querySelector("#quantity").value;;
+//console.log(QtAchatK);
+
+// object test 
+//1) ajout au panier id + couleur + quantité
+//consolelog(idProduct + ' : ' + colorKanap + ' : ' +QtAchat);
+
+//console.log(JSON.stringify({ id: idProduct, color: colorKanap, qt: QtAchat}));
+// on creer objet
+let productCartObj = { 
+    idK : idProduct,
+    colorK : ColorK,
+    qtyK  : QtAchatK,
+}
+;
                 
-                    let productCartObj = {
-                        idKanap : idProduct,
-                        nameKanap : nameKanap,
-                        colorKanap : colorKanap,
-                        qtyKanap  : qtyKanap,
-                        imgKanap : imgKanap,
-                        altImg : altImg,
-                        priceKanap : priceKanap
-                    };
-                
-                    productCart.push(productCartObj);
-                
-                    let objCart = JSON.stringify(productCart);
-                    localStorage.setItem("cart", objCart);
-                
-                    alert("Ajouté au panier !");
-                }
+//localStorage.setItem('maCart', productCartObj);
+//produitLocalStorage = JSON.stringify("productCartObj");  
+//let produitLocalStorage = JSON.stringify("productCartObj");  
 
-        } else {
+localStorage.setItem('maCart', JSON.stringify(productCartObj));
+console.log(productCartObj);
 
-            let productCart = [];
+//localStorage.setItem('maCart', productCartObj) ;                
+//console.log(productCartObj);
+//let produitLocal = JSON.parse("");  
+//localStorage.setItem('maCart', produitLocalStorage) ;   
+//console.log(produitLocal);
 
-            let idKanap = idProduct;
-            let nameKanap = document.querySelector("#title").textContent;
-            let colorKanap = document.querySelector("#colors").value;
-            let qtyKanap = document.querySelector("#quantity").value;
-            let imgKanap = img.src; 
-            let altImg = img.alt;
-            let priceKanap = document.querySelector("#price").textContent;
-            
-            console.log(img);
-            console.log(idKanap, nameKanap, colorKanap, qtyKanap, imgKanap, altImg, priceKanap);
-        
-            let productCartObj = {
-                idKanap : idProduct,
-                nameKanap : nameKanap,
-                colorKanap : colorKanap,
-                qtyKanap  : qtyKanap,
-                imgKanap : imgKanap,
-                altImg : altImg,
-                priceKanap : priceKanap
-            };
-        
-            productCart.push(productCartObj);
-        
-            let objCart = JSON.stringify(productCart);
-            localStorage.setItem("cart", objCart);
-        
-            alert("Ajouté au panier !");    
-        }
+// mettre en local storage :           localStorage.setItem('maCart', 'patate')            
+//supprimmer du local storage :        localStorage.removeItem("maCart");
+
+//productCart.push(productCartObj);
+//let achatStorage = ;
+
+// contruire la commande id + couleur + quantité puis mettre en localStorage
+
+
+////////////////////////////////////////////////////////////////////
+// changer page
+function tournerPage() {
+        location.href = "../html/index.html";
     }
+tournerPage();
+
+
+alert('vous avez rempli les champs comme il faut ,votre commande est enregistrer,vous pouvez commander autre chose ou allez dans votre panier pour valider votre commande');
+
+
+} else {
+
+alert('vous n\'avez pas rempli les champs comme il faut');
+//console.log('commande réussi');
+}
+///////////////////////////////////////////////////////////////
+
+//function addToCart() {
 }
