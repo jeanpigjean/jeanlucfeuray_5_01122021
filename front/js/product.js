@@ -1,6 +1,3 @@
-let myArray = [];
-localStorage.setItem("panier",JSON.stringify (myArray));
-
 //Récupération de l'id via les paramètres de l'url
 const idProduct = new URL(window.location.href).searchParams.get("id");
 
@@ -37,7 +34,7 @@ color.innerHTML = product.colors[i];
 colorsProduct.appendChild(color);
 }
 
-//=============== fonction ================//
+// clic
 let addToCartBtn = document.getElementById("addToCart");//séléctionner le bouton
 addToCartBtn.addEventListener("click", function() {//au clic jouer la fonction addToCart
 
@@ -47,7 +44,7 @@ let color = colorChoice.value;
 let qtEnCour =document.querySelector("#quantity");
 let qtcom = qtEnCour.value;
 
-//============= ok ===============//
+// controle selecteur
 if (color == ''){
   // color
   alert('Vous devez choisir une couleur !');
@@ -56,11 +53,19 @@ if (color == ''){
 } else if (qtcom == 0) {
   alert('Vous devez choisir un nombre d\'article !');
   return;
-} else {
+} 
+
+else if (qtcom > 100) {
+  alert('Vous ne pouvez pas commander plus de 100 articles !');
+  return;
+} 
+
+else {
   
-  alert('commande ajouter au panier et si vous voulez commander autre chose !');
+  alert('Votre commande est ajouter au panier.');
 }
 
+// achat object
 let tarray = {
   idlocal: idProduct, 
   imagelocal:product.imageUrl, 
@@ -69,21 +74,28 @@ let tarray = {
   colorlocal: color, 
   qtlocal: qtcom
 };
-//==========================//
-fonctiontbleaulocalstorage ();
 
-function fonctiontbleaulocalstorage () {
-myArray.push(tarray);
-localStorage.setItem("panier",JSON.stringify (myArray));  
-//let myArray = localStorage.getItem("panier",JSON.stringify (myArray));  
-console.log(myArray);
-} //function fonctiontbleaulocalstorage
+// init localStorage
+let produitLocalStorage = JSON.parse(localStorage.getItem("panier"));
+//console.log(produitLocalStorage);//null
 
-//======= changer page =====//
+if (produitLocalStorage != null ) {
+produitLocalStorage.push(tarray);
+localStorage.setItem("panier", JSON.stringify(produitLocalStorage));
+} else {
+produitLocalStorage = [];
+produitLocalStorage.push(tarray);
+localStorage.setItem("panier", JSON.stringify(produitLocalStorage));
+}
+
+// envoie vers page index si user veux faire autre achat
 function tournerPage() {
-        location.href = "../../html/index.html";
+        location.href = "../../index.html";
     }
 tournerPage();
+
+});//clic
+
 
 }); //  fetch       
 }  //fetch
