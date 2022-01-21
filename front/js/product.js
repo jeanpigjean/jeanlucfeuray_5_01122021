@@ -68,9 +68,9 @@ else {
 // achat object
 let tarray = {
   idlocal: idProduct, 
-  imagelocal:product.imageUrl, 
-  namelocal: product.name, 
-  descriptionlocal: product.description, 
+  //imagelocal:product.imageUrl, 
+  //namelocal: product.name, 
+  //descriptionlocal: product.description, 
   colorlocal: color, 
   qtlocal: qtcom
 };
@@ -79,20 +79,72 @@ let tarray = {
 let produitLocalStorage = JSON.parse(localStorage.getItem("panier"));
 //console.log(produitLocalStorage);//null
 
-if (produitLocalStorage != null ) {
+
+
+
+
+/* if (produitLocalStorage != null ) {
 produitLocalStorage.push(tarray);
 localStorage.setItem("panier", JSON.stringify(produitLocalStorage));
 } else {
 produitLocalStorage = [];
 produitLocalStorage.push(tarray);
 localStorage.setItem("panier", JSON.stringify(produitLocalStorage));
+} */
+
+
+function controleObjetLocal() {
+//var tarray = ["a", "b", "c"];
+for(x in tarray)
+{
+  console.log(tarray[x]);
+}
 }
 
+// new if
+if (produitLocalStorage != null) {
+console.log('si local storage est différent de null');
+//controle si present
+
+//fonction controle objet local
+controleObjetLocal();
+
+
+//produitLocalStorage.push(tarray);
+//localStorage.setItem("panier", JSON.stringify(produitLocalStorage));
+
+} else if (produitLocalStorage == null) {
+//le tableau est creer alors on,contole panier
+// si commande est dja la ,arret
+console.log('si local storage est  null');
+produitLocalStorage = [];
+produitLocalStorage.push(tarray);
+localStorage.setItem("panier", JSON.stringify(produitLocalStorage));
+
+} else {
+console.log('dernier else')
+//ajout panieer
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // envoie vers page index si user veux faire autre achat
-function tournerPage() {
-        location.href = "../../index.html";
-    }
-tournerPage();
+//function tournerPage() {
+        location.href = "index.html";
+    //}
+//tournerPage();
 
 });//clic
 
